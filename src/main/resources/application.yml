@@ -1,17 +1,17 @@
 spring:
+  application:
+    name: notifikasi-service
   mail:
-    host: smtp.gmail.com  # Contoh: smtp.gmail.com atau localhost (jika pakai MailHog)
-    port: 587   # Contoh: 587 atau 465
+    host: smtp.gmail.com
+    port: 587
     username: randuariniaulia@gmail.com 
-    password: irbcpqirplsrxmvc # PENTING: Gunakan Sandi Aplikasi
+    password: irbcpqirplsrxmvc
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-  application:
-    name: rabbitmq
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
@@ -30,22 +30,44 @@ spring:
       enabled: true
       path: /h2-console
   rabbitmq:
-    host: localhost
+    host: rabbitmq  # DIUBAH: Menggunakan nama service di docker-compose
     port: 5672
-    username: guest
-    password: guest
+    username: admin
+    password: password
     template:
       exchange: order.exchange
     listener:
       simple:
         default-requeue-rejected: false
 
+server:
+  port: 8085
+
 app:
   rabbitmq:
     queue: order.queue
     exchange: order.exchange
     routing-key: order.routing.key
+  library:
+    queue: notification.queue
+    exchange: notification.exchange
+    routing-key: notification.key
 
 logging:
   level:
     com.randu.rabbitmq: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true

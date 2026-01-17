@@ -38,6 +38,33 @@ public class RabbitMQConfig {
                 .with(routingKey);
     }
 
+    // Library Notification Beans
+    @Value("${app.library.queue}")
+    private String libraryQueue;
+
+    @Value("${app.library.exchange}")
+    private String libraryExchange;
+
+    @Value("${app.library.routing-key}")
+    private String libraryRoutingKey;
+
+    @Bean
+    public Queue libraryQueue() {
+        return new Queue(libraryQueue, true);
+    }
+
+    @Bean
+    public DirectExchange libraryExchange() {
+        return new DirectExchange(libraryExchange);
+    }
+
+    @Bean
+    public Binding libraryBinding(Queue libraryQueue, DirectExchange libraryExchange) {
+        return BindingBuilder.bind(libraryQueue)
+                .to(libraryExchange)
+                .with(libraryRoutingKey);
+    }
+
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();

@@ -16,7 +16,7 @@ public class KirimEmail {
     public void sendOrderConfirmation(String to, String productName, int quantity, double price) {
         SimpleMailMessage message = new SimpleMailMessage();
         try {
-        message.setTo("asyrafilauliarasyid@gmail.com");
+        message.setTo("randuariniaulia@gmail.com");
         message.setSubject("Order Confirmation");
         message.setText("Thank you for your order!\n\n" +
                 "Product: " + productName +
